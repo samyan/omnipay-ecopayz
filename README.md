@@ -19,7 +19,7 @@ to your `composer.json` file:
 ```json
 {
     "require": {
-        "samyan/omnipay-ecopayz": "~2.0"
+        "samyan/omnipay-ecopayz": "~2.0.0"
     }
 }
 ```
