@@ -11,7 +11,7 @@ use Omnipay\Common\Exception\InvalidRequestException;
  * @license   http://opensource.org/licenses/mit-license.php MIT
  * @version   3.0.0 Ecopayz API Specification
  */
-class CompletePurchaseRequest extends FetchTransactionRequest
+class CompletePurchaseRequest extends AbstractRequest
 {
     /**
      * Get the data for this request.
@@ -49,19 +49,23 @@ class CompletePurchaseRequest extends FetchTransactionRequest
     {
         if (isset($data->StatusReport)) {
             if (in_array($data->StatusReport->Status, array(1, 2, 3))) {
-                $response = $this->createResponse('OK', 0, 'OK');
+                $xml = $this->createResponse('OK', 0, 'OK');
             } elseif (in_array($data->StatusReport->Status, array(4, 5))) {
-                $response = $this->createResponse('Confirmed', 0, 'Confirmed');
+                $xml = $this->createResponse('Confirmed', 0, 'Confirmed');
             } else {
-                $response = $this->createResponse('InvalidRequest', 99, 'Invalid StatusReport/Status');
+                $xml = $this->createResponse('InvalidRequest', 99, 'Invalid StatusReport/Status');
             }
 
-            header('Content-Type: text/xml; charset=utf-8');
-            echo $response;
-            die();
-        } else {
-            return new CompletePurchaseResponse($this, $data);
+            $data = [
+                'notifyData' => $data,
+                'response' => [
+                    'xml' => $xml,
+                    'object' => new \SimpleXMLElement($xml)
+                ]
+            ];
         }
+
+        return $this->response = new CompletePurchaseResponse($this, $data);
     }
 
     /**

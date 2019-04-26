@@ -105,7 +105,7 @@ class FetchTransactionRequest extends AbstractRequest
                 'SOAPAction' => 'http://www.ecocard.com/merchantAPI/QueryBySVSTransactionID'
             );
 
-            $httpRequest = $this->httpClient->createRequest('POST', $this->getEndpoint(), $headers, $data);
+            $httpRequest = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $data);
             $httpResponse = $httpRequest->send();
             $xmlResponse = simplexml_load_string($httpResponse->getBody()->getContents());
 
@@ -133,7 +133,7 @@ class FetchTransactionRequest extends AbstractRequest
                 'SOAPAction' => 'http://www.ecocard.com/merchantAPI/QueryByCustomerTransactionID'
             );
 
-            $httpRequest = $this->httpClient->createRequest('POST', $this->getEndpoint(), $headers, $data);
+            $httpRequest = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $data);
             $httpResponse = $httpRequest->send();
             $xmlResponse = simplexml_load_string($httpResponse->getBody()->getContents());
 

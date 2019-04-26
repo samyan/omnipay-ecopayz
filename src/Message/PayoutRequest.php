@@ -148,7 +148,7 @@ class PayoutRequest extends AbstractRequest
     /**
      * Send the request with specified data
      *
-     * @param  mixed                    $data The data to send
+     * @param  mixed $data The data to send
      * @throws InvalidResponseException
      * @return FetchTransactionResponse
      */
@@ -159,7 +159,7 @@ class PayoutRequest extends AbstractRequest
             'SOAPAction' => 'http://www.ecocard.com/merchantAPI/Payout'
         );
 
-        $httpRequest = $this->httpClient->createRequest('POST', $this->getEndpoint(), $headers, $data);
+        $httpRequest = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $data);
         $httpResponse = $httpRequest->send();
         $xmlResponse = simplexml_load_string($httpResponse->getBody()->getContents());
 

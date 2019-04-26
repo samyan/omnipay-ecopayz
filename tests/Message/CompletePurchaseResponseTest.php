@@ -6,10 +6,9 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
 
 class CompletePurchaseResponseTest extends TestCase
 {
-
     public function testFailure()
     {
-        $httpRequest = new HttpRequest(array(), array(), array(), array(), array(), array(), '<?xml version="1.0" encoding="utf-8"?><TransactionResult xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><ErrorCode>11007</ErrorCode><Message>Merchant did not process the transaction and returned response "Error".</Message><SvsTxID>1865010000008351204</SvsTxID><TransactionType>Purchase</TransactionType><ProcessingTime>20141009 12:18:17</ProcessingTime><Amount>78</Amount><Currency>EUR</Currency><MerchantAccountNumber>110355</MerchantAccountNumber><ClientAccountNumber>1100185585</ClientAccountNumber><TransactionDescription /><ClientTransactionID>2257</ClientTransactionID></TransactionResult>');
+        $httpRequest = new HttpRequest(array(), array(), array(), array(), array(), array(), '<?xml version="1.0" encoding="utf-8"?><SVSPurchaseStatusNotificationRequest><StatusReport><StatusDescription></StatusDescription><Status>3</Status><SVSTransaction><SVSCustomerAccount>1100382492</SVSCustomerAccount><ProcessingTime>2019-04-25 19:35:07</ProcessingTime><Result><Description>Not enough money for the withdrawal operation. The account balance less than transaction amount.</Description><Code>11007</Code></Result><BatchNumber>7036138</BatchNumber><Id>2326010000008972333</Id></SVSTransaction><SVSCustomer><IP>10.8.140.15</IP><PostalCode>33465</PostalCode><Country>DE</Country><LastName>Dicaprio</LastName><FirstName>Leo</FirstName></SVSCustomer></StatusReport><Request><MerchantFreeText></MerchantFreeText><CustomerIdAtMerchant>22</CustomerIdAtMerchant><MerchantAccountNumber>112013</MerchantAccountNumber><Currency>EUR</Currency><Amount>10.00</Amount><TxBatchNumber>0</TxBatchNumber><TxID>1514336366</TxID></Request><Authentication><Checksum>4dc3a456b17e4239d3ca9eb3c17426e8</Checksum></Authentication></SVSPurchaseStatusNotificationRequest>');
         $request = new CompletePurchaseRequest($this->getHttpClient(), $httpRequest);
         $request->initialize(array(
             'merchantId' => '100',
@@ -21,19 +20,12 @@ class CompletePurchaseResponseTest extends TestCase
 
         $this->assertFalse($response->isSuccessful());
         $this->assertSame(11007, $response->getCode());
-        $this->assertSame('Merchant did not process the transaction and returned response "Error".', $response->getMessage());
-        $this->assertSame('2257', $response->getTransactionId());
-        $this->assertSame('1865010000008351204', $response->getTransactionReference());
-        $this->assertSame('0.78', $response->getAmount());
-        $this->assertSame('EUR', $response->getCurrency());
-        $this->assertSame('110355', $response->getMerchantAccountNumber());
-        $this->assertSame('Purchase', $response->getTransactionType());
-        $this->assertSame('20141009 12:18:17', $response->getProcessingTime());
+        $this->assertSame('Not enough money for the withdrawal operation. The account balance less than transaction amount.', $response->getDescription());
     }
 
     public function testSuccess()
     {
-        $httpRequest = new HttpRequest(array(), array(), array(), array(), array(), array(), '<?xml version="1.0" encoding="utf-8"?><TransactionResult xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><ErrorCode>0</ErrorCode><Message>OK</Message><SvsTxID>1865010000008351205</SvsTxID><TransactionType>Purchase</TransactionType><ProcessingTime>20141009 12:18:17</ProcessingTime><Amount>78</Amount><Currency>EUR</Currency><MerchantAccountNumber>110355</MerchantAccountNumber><ClientAccountNumber>1100185585</ClientAccountNumber><TransactionDescription /><ClientTransactionID>2258</ClientTransactionID></TransactionResult>');
+        $httpRequest = new HttpRequest(array(), array(), array(), array(), array(), array(), '<?xml version="1.0" encoding="utf-8"?><SVSPurchaseStatusNotificationRequest><StatusReport><StatusDescription></StatusDescription><Status>4</Status><SVSTransaction><SVSCustomerAccount>1100382492</SVSCustomerAccount><ProcessingTime>2019-04-25 19:35:07</ProcessingTime><Result><Description></Description><Code></Code></Result><BatchNumber>7036138</BatchNumber><Id>2326010000008972333</Id></SVSTransaction><SVSCustomer><IP>10.8.140.15</IP><PostalCode>33465</PostalCode><Country>DE</Country><LastName>Dicaprio</LastName><FirstName>Leo</FirstName></SVSCustomer></StatusReport><Request><MerchantFreeText></MerchantFreeText><CustomerIdAtMerchant>22</CustomerIdAtMerchant><MerchantAccountNumber>112013</MerchantAccountNumber><Currency>EUR</Currency><Amount>10.00</Amount><TxBatchNumber>0</TxBatchNumber><TxID>1514336366</TxID></Request><Authentication><Checksum>4dc3a456b17e4239d3ca9eb3c17426e8</Checksum></Authentication></SVSPurchaseStatusNotificationRequest>');
         $request = new CompletePurchaseRequest($this->getHttpClient(), $httpRequest);
         $request->initialize(array(
             'merchantId' => '100',
@@ -45,13 +37,6 @@ class CompletePurchaseResponseTest extends TestCase
 
         $this->assertTrue($response->isSuccessful());
         $this->assertSame(0, $response->getCode());
-        $this->assertSame('OK', $response->getMessage());
-        $this->assertSame('2258', $response->getTransactionId());
-        $this->assertSame('1865010000008351205', $response->getTransactionReference());
-        $this->assertSame('0.78', $response->getAmount());
-        $this->assertSame('EUR', $response->getCurrency());
-        $this->assertSame('110355', $response->getMerchantAccountNumber());
-        $this->assertSame('Purchase', $response->getTransactionType());
-        $this->assertSame('20141009 12:18:17', $response->getProcessingTime());
+        $this->assertSame('OK', $response->getDescription());
     }
 }
