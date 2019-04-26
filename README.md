@@ -65,7 +65,7 @@ if ($response->isRedirect() === true) {
 // You code
 // { . . . }
 
-$request = $this->gateway->completePurchase();
+$request = $gateway->completePurchase();
 $response = $request->send();
 
 // Check if ok
