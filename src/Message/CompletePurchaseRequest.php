@@ -6,10 +6,10 @@ use Omnipay\Common\Exception\InvalidRequestException;
 /**
  * Ecopayz Complete Purchase Request
  *
- * @author    Alexander Fedra <contact@dercoder.at>
- * @copyright 2015 DerCoder
- * @license   http://opensource.org/licenses/mit-license.php MIT
- * @version   3.0.0 Ecopayz API Specification
+ * @author Samuel Petrosyan <spetrosyan@codeblock.pro>
+ * @copyright 2019 Codeblock
+ * @license http://opensource.org/licenses/mit-license.php MIT
+ * @version 3.0.0 Ecopayz API Specification
  */
 class CompletePurchaseRequest extends AbstractRequest
 {
