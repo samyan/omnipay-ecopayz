@@ -2,11 +2,7 @@
 
 **Ecopayz driver for the Omnipay V3 PHP payment processing library**
 
-[![Build Status](https://travis-ci.org/samyan/omnipay-ecopayz.png?branch=master)](https://travis-ci.org/samyan/omnipay-ecopayz)
-[![Latest Stable Version](https://poser.pugx.org/samyan/omnipay-ecopayz/v/stable.png)](https://packagist.org/packages/samyan/omnipay-ecopayz)
-[![Total Downloads](https://poser.pugx.org/samyan/omnipay-ecopayz/downloads.png)](https://packagist.org/packages/samyan/omnipay-ecopayz)
-[![Latest Unstable Version](https://poser.pugx.org/samyan/omnipay-ecopayz/v/unstable.png)](https://packagist.org/packages/samyan/omnipay-ecopayz)
-[![License](https://poser.pugx.org/samyan/omnipay-ecopayz/license.png)](https://packagist.org/packages/samyan/omnipay-ecopayz)
+[![Build Status](https://travis-ci.org/samyan/omnipay-ecopayz.png?branch=master)](https://travis-ci.org/samyan/omnipay-ecopayz) [![Latest Stable Version](https://poser.pugx.org/samyan/omnipay-ecopayz/v/stable.png)](https://packagist.org/packages/samyan/omnipay-ecopayz) [![Total Downloads](https://poser.pugx.org/samyan/omnipay-ecopayz/downloads.png)](https://packagist.org/packages/samyan/omnipay-ecopayz) [![Latest Unstable Version](https://poser.pugx.org/samyan/omnipay-ecopayz/v/unstable.png)](https://packagist.org/packages/samyan/omnipay-ecopayz) [![License](https://poser.pugx.org/samyan/omnipay-ecopayz/license.png)](https://packagist.org/packages/samyan/omnipay-ecopayz)
 
 [Omnipay](https://github.com/omnipay/omnipay) is a framework agnostic, multi-gateway payment
 processing library for PHP 5.3+. This package implements [Ecopayz](http://www.ecopayz.com) support for Omnipay.
@@ -38,6 +34,77 @@ The following gateways are provided by this package:
 For general usage instructions, please see the main [Omnipay](https://github.com/omnipay/omnipay)
 repository.
 
+**Purchase Example:**
+```php
+$gateway = Omnipay::create('Ecopayz');
+
+// You code
+// { . . . }
+
+$params = array(
+	'customerIdAtMerchant' => $customerIdAtMerchant,
+	'transactionId' => $transactionId,
+	'amount' => $amount,
+	'currency' => $currency,
+	'notifyUrl' => $notifyUrl,
+	'returnUrl' => $returnUrl,
+	'cancelUrl' => $cancelUrl
+);
+
+$request = $gateway->purchase($params);
+$response = $request->send();
+
+if ($response->isRedirect() === true) {
+	echo $response->getRedirectUrl();
+}
+```
+
+**PurchaseComplete Example:**
+
+```php
+// You code
+// { . . . }
+
+$request = $this->gateway->completePurchase();
+$response = $request->send();
+
+// Check if ok
+if (!$response->isSuccessful()) {
+	return false;
+}
+
+// Get XML object
+$xml = $response->getData();
+
+$resultCode = (string)$xml->TransactionResult->Code;
+
+// Check transaction status
+switch ($resultCode) {
+	case '0':
+		$state = 'success';
+		break;
+	case '1':
+		$state = 'failed';
+		break;
+	case '2':
+		$state = 'cancelled';
+		break;
+	case '3':
+		$state = 'failed';
+		break;
+	case '4':
+		$state = 'pending';
+		break;
+	case '5':
+		$state = 'cancelled';
+}
+
+// You code
+// { . . . }
+
+// At the end print the response to Ecopayz  (obligatory for completation of purchase)
+echo $response->getXmlData();
+```
 ## Support
 
 If you are having general issues with Omnipay, we suggest posting on
