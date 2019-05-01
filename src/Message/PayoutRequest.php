@@ -159,9 +159,8 @@ class PayoutRequest extends AbstractRequest
             'SOAPAction' => 'http://www.ecocard.com/merchantAPI/Payout'
         );
 
-        $httpRequest = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $data);
-        $httpResponse = $httpRequest->send();
-        $xmlResponse = simplexml_load_string($httpResponse->getBody()->getContents());
+        $httpResponse = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $data);
+        $xmlResponse = simplexml_load_string((string) $httpResponse->getBody());
 
         $xmlResponse
             ->children('http://schemas.xmlsoap.org/soap/envelope/')
