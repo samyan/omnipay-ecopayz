@@ -105,11 +105,10 @@ class FetchTransactionRequest extends AbstractRequest
                 'SOAPAction' => 'http://www.ecocard.com/merchantAPI/QueryBySVSTransactionID'
             );
 
-            $httpRequest = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $data);
-            $httpResponse = $httpRequest->send();
-            $xmlResponse = simplexml_load_string($httpResponse->getBody()->getContents());
+            $httpResponse = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $data);
+            $xmlResponse = new \SimpleXMLElement($httpResponse->getBody()->getContents());
 
-            $xmlResponse
+            $xmlResponse = $xmlResponse
                 ->children('http://schemas.xmlsoap.org/soap/envelope/')
                 ->children('http://www.ecocard.com/merchantAPI/');
 
@@ -133,11 +132,10 @@ class FetchTransactionRequest extends AbstractRequest
                 'SOAPAction' => 'http://www.ecocard.com/merchantAPI/QueryByCustomerTransactionID'
             );
 
-            $httpRequest = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $data);
-            $httpResponse = $httpRequest->send();
-            $xmlResponse = simplexml_load_string($httpResponse->getBody()->getContents());
+            $httpResponse = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $data);
+            $xmlResponse = new \SimpleXMLElement($httpResponse->getBody()->getContents());
 
-            $xmlResponse
+            $xmlResponse = $xmlResponse
                 ->children('http://schemas.xmlsoap.org/soap/envelope/')
                 ->children('http://www.ecocard.com/merchantAPI/');
 

@@ -6,8 +6,8 @@ use Omnipay\Common\Exception\InvalidResponseException;
 /**
  * Ecopayz Payout Request
  *
- * @author    Alexander Fedra <contact@dercoder.at>
- * @copyright 2015 DerCoder
+ * @author Samnuel Petrosyan <spetrosyam@codeblock.pro>
+ * @copyright 2019 Codeblock
  * @license   http://opensource.org/licenses/mit-license.php MIT
  * @version   3.0.0 Ecopayz API Specification
  */
@@ -148,7 +148,7 @@ class PayoutRequest extends AbstractRequest
     /**
      * Send the request with specified data
      *
-     * @param  mixed $data The data to send
+     * @param  mixed                    $data The data to send
      * @throws InvalidResponseException
      * @return FetchTransactionResponse
      */
@@ -160,9 +160,9 @@ class PayoutRequest extends AbstractRequest
         );
 
         $httpResponse = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $data);
-        $xmlResponse = simplexml_load_string((string) $httpResponse->getBody());
-
-        $xmlResponse
+        $xmlResponse = new \SimpleXMLElement($httpResponse->getBody()->getContents());
+    
+        $xmlResponse = $xmlResponse
             ->children('http://schemas.xmlsoap.org/soap/envelope/')
             ->children('http://www.ecocard.com/merchantAPI/');
 
